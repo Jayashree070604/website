@@ -1,0 +1,12 @@
+**/.git
+**/.gitignore
+**/.vs
+**/bin
+**/obj
+**/node_modules
+**/*.user
+**/*.suo
+**/*.db
+**/*.db-shm
+**/*.db-wal
+ProjectKnowledgePortal/wwwroot/uploads
