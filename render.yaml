@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: pkp-web
+    runtime: docker
+    plan: starter
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Database__Provider
+        value: postgresql
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: pkp-postgres
+          property: connectionString
+      - key: Storage__UploadsRootPath
+        value: /data/uploads
+      - key: ObjectStorage__Enabled
+        value: "false"
+      - key: SeedSuperAdmin__Email
+        sync: false
+      - key: SeedSuperAdmin__Password
+        sync: false
+    disks:
+      - name: pkp-data
+        mountPath: /data
+        sizeGB: 5
+
+databases:
+  - name: pkp-postgres
+    plan: starter
+    region: oregon
+    postgresMajorVersion: "18"
