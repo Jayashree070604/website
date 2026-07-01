@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="dashboard-page">
+    <div class="welcome-banner mb-4">
+        <h1 class="h3 mb-1 fw-bold">Welcome! What would you like to manage today?</h1>
+        <p class="mb-0">Use quick actions to open projects, uploads, and administration modules.</p>
+    </div>
+
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+    {
+        <div class="dashboard-panel mb-4">
+            <div class="dashboard-panel-header">Quick Actions</div>
+            <div class="dashboard-panel-body d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Projects" asp-action="Index">Projects</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Documents" asp-action="Upload">Upload Document</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Videos" asp-action="Upload">Upload Video</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Images" asp-action="Upload">Upload Image</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Scripts" asp-action="Upload">Upload Script</a>
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <a class="btn btn-outline-secondary btn-sm" asp-controller="Users" asp-action="Index">User Management</a>
+                    <a class="btn btn-outline-secondary btn-sm" asp-controller="Users" asp-action="Create">Create User/Admin</a>
+                }
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <div class="dashboard-note">
+            Recent Uploads and Recent Activities are available in <strong>Database</strong> section only.
+            <a asp-controller="ActivityLogs" asp-action="Index" class="ms-1">Open Database</a>
+        </div>
+    }
+</section>

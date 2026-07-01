@@ -1,0 +1,15 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+wwwroot/uploads/
+.vs/
+*.user
+*.suo
+TestResults/
+*.nupkg
+*.snupkg
+publish/
+artifacts/
+.vs/

@@ -1,0 +1,73 @@
+@model ProjectKnowledgePortal.ViewModels.Search.GlobalSearchViewModel
+
+@{
+	ViewData["Title"] = "Global Search";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header">
+		<h5 class="mb-0">Global Search</h5>
+	</div>
+	<div class="card-body">
+		<form method="get" asp-controller="Search" asp-action="Index" class="row g-2 mb-3">
+			<div class="col-12 col-md-10">
+				<input name="query" value="@Model.Query" class="form-control" placeholder="Search projects, documents, videos, scripts, images, links, categories" />
+			</div>
+			<div class="col-12 col-md-2 d-grid">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+		</form>
+
+		@if (string.IsNullOrWhiteSpace(Model.Query))
+		{
+			<div class="text-muted">Enter a keyword to start searching across the portal.</div>
+		}
+		else if (Model.TotalResults == 0)
+		{
+			<div class="alert alert-warning mb-0">No results found for <strong>@Model.Query</strong>.</div>
+		}
+		else
+		{
+			<div class="mb-3">
+				<strong>@Model.TotalResults</strong> result(s) found for <strong>@Model.Query</strong>.
+			</div>
+
+			@foreach (var group in Model.Groups)
+			{
+				<div class="mb-4">
+					<h6 class="border-bottom pb-2">@group.Module (@group.Items.Count)</h6>
+
+					<div class="table-responsive">
+						<table class="table table-sm table-striped align-middle mb-0">
+							<thead>
+								<tr>
+									<th>Title</th>
+									<th>Summary</th>
+									<th>Project</th>
+									<th>Category</th>
+									<th>Created (UTC)</th>
+									<th class="text-end">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var item in group.Items)
+								{
+									<tr>
+										<td>@item.Title</td>
+										<td>@(string.IsNullOrWhiteSpace(item.Summary) ? "-" : item.Summary)</td>
+										<td>@(item.ProjectName ?? "-")</td>
+										<td>@(item.CategoryName ?? "-")</td>
+										<td>@(item.CreatedAtUtc.HasValue ? item.CreatedAtUtc.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+										<td class="text-end">
+											<a class="btn btn-sm btn-outline-secondary" href="@item.DetailsUrl">Open</a>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			}
+		}
+	</div>
+</div>

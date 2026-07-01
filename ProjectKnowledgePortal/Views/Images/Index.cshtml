@@ -1,0 +1,109 @@
+@model ProjectKnowledgePortal.ViewModels.Images.ImageListViewModel
+@using ProjectKnowledgePortal.Helpers
+
+@{
+	ViewData["Title"] = "Images";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header d-flex justify-content-between align-items-center">
+		<h5 class="mb-0">Images Gallery</h5>
+		@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+		{
+			<a class="btn btn-primary btn-sm" asp-action="Upload">Upload Image</a>
+		}
+	</div>
+	<div class="card-body">
+		@if (TempData["SuccessMessage"] is string successMessage)
+		{
+			<div class="alert alert-success">@successMessage</div>
+		}
+
+		<form method="get" class="row g-2 mb-3">
+			<div class="col-12 col-md-5">
+				<input asp-for="SearchText" class="form-control" placeholder="Search by image name" />
+			</div>
+			<div class="col-12 col-md-5">
+				<select asp-for="ProjectId" asp-items="Model.ProjectOptions" class="form-select">
+					<option value="">All Projects</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-2 d-grid">
+				<button type="submit" class="btn btn-outline-primary">Filter</button>
+			</div>
+		</form>
+
+		@if (Model.Images.Count == 0)
+		{
+			<div class="text-center text-muted py-4">No images found.</div>
+		}
+		else
+		{
+			<div class="row g-3">
+				@foreach (var item in Model.Images)
+				{
+					<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+						<div class="card h-100 shadow-sm">
+							<button type="button"
+									class="border-0 bg-transparent p-0"
+									data-bs-toggle="modal"
+									data-bs-target="#imageZoomModal"
+									data-image-url="@item.ImageUrl"
+									data-image-title="@item.Name">
+								<img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 180px; object-fit: cover;" />
+							</button>
+							<div class="card-body">
+								<h6 class="card-title mb-1">@item.Name</h6>
+								<div class="small text-muted">Project: @item.ProjectName</div>
+								<div class="small text-muted">Category: @(item.CategoryName ?? "-")</div>
+								<div class="small text-muted">Size: @(Math.Round(item.FileSizeBytes / 1024.0, 2)) KB</div>
+							</div>
+							<div class="card-footer d-flex flex-wrap gap-1">
+								<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+								<a class="btn btn-sm btn-outline-success" asp-action="Download" asp-route-id="@item.Id">Download</a>
+								@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+								{
+									<a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+								}
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		}
+	</div>
+</div>
+
+<div class="modal fade" id="imageZoomModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="imageZoomModalTitle">Image Preview</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body text-center">
+				<img id="imageZoomModalPreview" src="" alt="Preview" class="img-fluid" />
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		const imageZoomModal = document.getElementById('imageZoomModal');
+		if (imageZoomModal) {
+			imageZoomModal.addEventListener('show.bs.modal', function (event) {
+				const button = event.relatedTarget;
+				const imageUrl = button.getAttribute('data-image-url');
+				const imageTitle = button.getAttribute('data-image-title');
+
+				const modalTitle = imageZoomModal.querySelector('#imageZoomModalTitle');
+				const modalImage = imageZoomModal.querySelector('#imageZoomModalPreview');
+
+				modalTitle.textContent = imageTitle || 'Image Preview';
+				modalImage.src = imageUrl || '';
+				modalImage.alt = imageTitle || 'Preview';
+			});
+		}
+	</script>
+}

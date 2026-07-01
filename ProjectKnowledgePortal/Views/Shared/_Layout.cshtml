@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProjectKnowledgePortal</title>
+    <script>
+        (() => {
+            try {
+                const savedTheme = localStorage.getItem('pkp-theme');
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                }
+            } catch {
+            }
+        })();
+    </script>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProjectKnowledgePortal.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="app-header border-bottom box-shadow-sm">
+        <nav class="navbar navbar-expand-lg bg-white">
+            <div class="container-fluid px-3">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/zeiss-logo.png" asp-append-version="true" alt="ZEISS Logo" class="brand-logo" />
+                    <span class="fw-semibold text-dark">Project Knowledge Portal</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"
+                        aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="topNav">
+                    <div class="me-auto"></div>
+                    <form class="d-flex me-3" asp-controller="Search" asp-action="Index" method="get" role="search">
+                        <input class="form-control form-control-sm me-2" type="search" name="query" placeholder="Global search" aria-label="Global search">
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Search</button>
+                    </form>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="app-shell">
+        <aside class="app-sidebar border-end">
+            <nav class="nav flex-column p-3 gap-1">
+                <a class="nav-link active" asp-controller="Home" asp-action="Index">Dashboard</a>
+                <a class="nav-link" asp-controller="Projects" asp-action="Index">Projects</a>
+                <a class="nav-link" asp-controller="Documents" asp-action="Index">Documents</a>
+                <a class="nav-link" asp-controller="Videos" asp-action="Index">Videos</a>
+                <a class="nav-link" asp-controller="Scripts" asp-action="Index">Scripts</a>
+                <a class="nav-link" asp-controller="Images" asp-action="Index">Images</a>
+                <a class="nav-link" asp-controller="Links" asp-action="Index">Links</a>
+                <a class="nav-link" asp-controller="Softwares" asp-action="Index">Softwares</a>
+            </nav>
+        </aside>
+
+        <main role="main" class="app-content p-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container-fluid px-3">
+            &copy; 2026 - ProjectKnowledgePortal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

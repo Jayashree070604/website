@@ -1,0 +1,48 @@
+@model ProjectKnowledgePortal.ViewModels.Images.ImageUploadViewModel
+
+@{
+	ViewData["Title"] = "Upload Image";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header">
+		<h5 class="mb-0">Upload Image</h5>
+	</div>
+	<div class="card-body">
+		<div class="alert alert-info">
+			Allowed file types: JPG, JPEG, PNG, GIF, WEBP. Maximum file size: 10 MB.
+		</div>
+
+		<form asp-action="Upload" method="post" enctype="multipart/form-data">
+			@Html.AntiForgeryToken()
+			<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+			<div class="mb-3">
+				<label asp-for="Name" class="form-label"></label>
+				<input asp-for="Name" class="form-control" placeholder="Optional. Defaults to file name." />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="ProjectId" class="form-label"></label>
+				<select asp-for="ProjectId" asp-items="Model.ProjectOptions" class="form-select"></select>
+				<span asp-validation-for="ProjectId" class="text-danger"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="File" class="form-label"></label>
+				<input asp-for="File" class="form-control" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp" />
+				<span asp-validation-for="File" class="text-danger"></span>
+			</div>
+
+			<div class="d-flex gap-2">
+				<button type="submit" class="btn btn-primary">Upload</button>
+				<a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

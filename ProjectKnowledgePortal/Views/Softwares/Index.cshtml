@@ -1,0 +1,87 @@
+@model ProjectKnowledgePortal.ViewModels.Links.LinkListViewModel
+@using ProjectKnowledgePortal.Helpers
+
+@{
+	ViewData["Title"] = "Softwares";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header d-flex justify-content-between align-items-center">
+		<h5 class="mb-0">Softwares</h5>
+		@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+		{
+			<a class="btn btn-primary btn-sm" asp-action="Create">Add Software Link</a>
+		}
+	</div>
+	<div class="card-body">
+		@if (TempData["SuccessMessage"] is string successMessage)
+		{
+			<div class="alert alert-success">@successMessage</div>
+		}
+
+		<form method="get" class="row g-2 mb-3">
+			<div class="col-12 col-md-4">
+				<input asp-for="SearchText" class="form-control" placeholder="Search software title or URL" />
+			</div>
+			<div class="col-12 col-md-3">
+				<select asp-for="ProjectId" asp-items="Model.ProjectOptions" class="form-select">
+					<option value="">All Projects</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-3">
+				<select asp-for="CategoryId" asp-items="Model.CategoryOptions" class="form-select">
+					<option value="">All Categories</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-2 d-grid">
+				<button type="submit" class="btn btn-outline-primary">Filter</button>
+			</div>
+		</form>
+
+		<div class="table-responsive">
+			<table class="table table-striped align-middle">
+				<thead>
+					<tr>
+						<th>Software</th>
+						<th>Download URL</th>
+						<th>Project</th>
+						<th>Category</th>
+						<th>Created (UTC)</th>
+						<th class="text-end">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.Links.Count == 0)
+					{
+						<tr>
+							<td colspan="6" class="text-center text-muted py-4">No software links found.</td>
+						</tr>
+					}
+					else
+					{
+						@foreach (var item in Model.Links)
+						{
+							<tr>
+								<td>@item.Title</td>
+								<td class="text-truncate" style="max-width: 300px;">@item.Url</td>
+								<td>@item.ProjectName</td>
+								<td>@(item.CategoryName ?? "-")</td>
+								<td>@item.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+								<td class="text-end">
+									<a class="btn btn-sm btn-outline-success" asp-action="Download" asp-route-id="@item.Id" target="_blank">Download</a>
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+									@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+									{
+										<a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+										<a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+									}
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

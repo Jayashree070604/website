@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+	var isLoginPage =
+		string.Equals(ViewContext.RouteData.Values["area"]?.ToString(), "Identity", StringComparison.OrdinalIgnoreCase)
+		&& string.Equals(ViewContext.RouteData.Values["page"]?.ToString(), "/Account/Login", StringComparison.OrdinalIgnoreCase);
+}
+
+<ul class="navbar-nav align-items-lg-center gap-lg-1">
+@if (SignInManager.IsSignedIn(User))
+{
+	<li class="nav-item">
+		<div class="dropdown">
+			<button class="btn btn-outline-secondary btn-sm dropdown-toggle settings-trigger" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Settings">
+				Settings
+			</button>
+			<ul class="dropdown-menu dropdown-menu-end">
+				<li>
+					<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Password Settings</a>
+				</li>
+				@if (User.IsInRole("SuperAdmin"))
+				{
+					<li>
+						<a class="dropdown-item" asp-controller="Users" asp-action="Index">Users</a>
+					</li>
+					<li>
+						<a class="dropdown-item" asp-controller="ActivityLogs" asp-action="Index">Activity Logs</a>
+					</li>
+				}
+				<li><hr class="dropdown-divider"></li>
+				<li class="px-3 py-2">
+					<div class="small fw-semibold mb-2">Theme</div>
+					<div class="d-flex gap-2">
+						<button type="button" class="btn btn-sm btn-outline-primary theme-toggle-btn" data-theme-value="light">Light</button>
+						<button type="button" class="btn btn-sm btn-outline-primary theme-toggle-btn" data-theme-value="dark">Dark</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li class="nav-item">
+		<form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+			<button type="submit" class="btn btn-outline-dark btn-sm">Logout</button>
+		</form>
+	</li>
+}
+else
+{
+	@if (!isLoginPage)
+	{
+		<li class="nav-item">
+			<a class="btn btn-primary btn-sm" asp-area="Identity" asp-page="/Account/Login">Login</a>
+		</li>
+	}
+}
+</ul>

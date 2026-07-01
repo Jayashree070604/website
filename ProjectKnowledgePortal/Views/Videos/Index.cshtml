@@ -1,0 +1,82 @@
+@model ProjectKnowledgePortal.ViewModels.Videos.VideoListViewModel
+@using ProjectKnowledgePortal.Helpers
+
+@{
+	ViewData["Title"] = "Videos";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header d-flex justify-content-between align-items-center">
+		<h5 class="mb-0">Videos</h5>
+		@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+		{
+			<a class="btn btn-primary btn-sm" asp-action="Upload">Upload Video</a>
+		}
+	</div>
+	<div class="card-body">
+		@if (TempData["SuccessMessage"] is string successMessage)
+		{
+			<div class="alert alert-success">@successMessage</div>
+		}
+
+		<form method="get" class="row g-2 mb-3">
+			<div class="col-12 col-md-5">
+				<input asp-for="SearchText" class="form-control" placeholder="Search by video name" />
+			</div>
+			<div class="col-12 col-md-5">
+				<select asp-for="ProjectId" asp-items="Model.ProjectOptions" class="form-select">
+					<option value="">All Projects</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-2 d-grid">
+				<button type="submit" class="btn btn-outline-primary">Filter</button>
+			</div>
+		</form>
+
+		<div class="table-responsive">
+			<table class="table table-striped align-middle">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Project</th>
+						<th>Category</th>
+						<th>Size</th>
+						<th>Uploaded (UTC)</th>
+						<th class="text-end">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.Videos.Count == 0)
+					{
+						<tr>
+							<td colspan="6" class="text-center text-muted py-4">No videos found.</td>
+						</tr>
+					}
+					else
+					{
+						@foreach (var item in Model.Videos)
+						{
+							<tr>
+								<td>@item.Name</td>
+								<td>@item.ProjectName</td>
+								<td>@(item.CategoryName ?? "-")</td>
+								<td>@(Math.Round(item.FileSizeBytes / (1024.0 * 1024.0), 2)) MB</td>
+								<td>@item.UploadedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+								<td class="text-end">
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+									<a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Watch</a>
+									<a class="btn btn-sm btn-outline-success" asp-action="Download" asp-route-id="@item.Id">Download</a>
+
+									@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+									{
+										<a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+									}
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

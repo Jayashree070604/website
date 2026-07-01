@@ -1,0 +1,236 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 46px;
+  background-color: #f5f7fb;
+  color: #0f172a;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.app-header {
+  background-color: #ffffff;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.navbar .nav-link {
+  color: #111827;
+  font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+  color: #0b5ed7;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  min-height: calc(100vh - 108px);
+}
+
+.app-sidebar {
+  background-color: #ffffff;
+}
+
+.app-sidebar .nav-link {
+  color: #1f2937;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 0.55rem 0.75rem;
+}
+
+.app-sidebar .nav-link:hover,
+.app-sidebar .nav-link.active {
+  background-color: #e9f2ff;
+  color: #0b5ed7;
+}
+
+.app-content {
+  min-width: 0;
+}
+
+.dashboard-page {
+  max-width: 1100px;
+}
+
+.welcome-banner {
+  background: linear-gradient(90deg, #0054d1 0%, #0b66f5 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+}
+
+.metric-card {
+  background-color: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  min-height: 100px;
+}
+
+.metric-title {
+  font-size: 0.95rem;
+  color: #0f172a;
+  margin-bottom: 0.35rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dashboard-panel {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.dashboard-panel-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+}
+
+.dashboard-panel-body {
+  padding: 0.85rem;
+}
+
+.dashboard-note {
+  background-color: #dff6ff;
+  border: 1px solid #b7ebff;
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+}
+
+.footer {
+  height: 46px;
+  line-height: 46px;
+  background-color: #ffffff;
+}
+
+html[data-theme='dark'] body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .app-header,
+html[data-theme='dark'] .navbar,
+html[data-theme='dark'] .app-sidebar,
+html[data-theme='dark'] .dashboard-panel,
+html[data-theme='dark'] .metric-card,
+html[data-theme='dark'] .footer {
+  background-color: #111827;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .navbar .nav-link,
+html[data-theme='dark'] .app-sidebar .nav-link,
+html[data-theme='dark'] .metric-title,
+html[data-theme='dark'] .text-dark,
+html[data-theme='dark'] .dropdown-item,
+html[data-theme='dark'] .footer,
+html[data-theme='dark'] .footer a {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme='dark'] .app-sidebar .nav-link:hover,
+html[data-theme='dark'] .app-sidebar .nav-link.active {
+  background-color: #1f2937;
+  color: #93c5fd !important;
+}
+
+html[data-theme='dark'] .dashboard-panel-header {
+  border-bottom-color: #374151;
+}
+
+html[data-theme='dark'] .dashboard-note {
+  background-color: #1f2937;
+  border-color: #374151;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .card,
+html[data-theme='dark'] .table,
+html[data-theme='dark'] .table-striped > tbody > tr:nth-of-type(odd) > *,
+html[data-theme='dark'] .table-striped > tbody > tr:nth-of-type(even) > * {
+  background-color: #111827;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .card-header,
+html[data-theme='dark'] .card-body,
+html[data-theme='dark'] .table th,
+html[data-theme='dark'] .table td,
+html[data-theme='dark'] .table thead th {
+  border-color: #374151;
+}
+
+html[data-theme='dark'] .form-control,
+html[data-theme='dark'] .form-select {
+  background-color: #0b1220;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .form-control::placeholder {
+  color: #94a3b8;
+}
+
+html[data-theme='dark'] .dropdown-menu {
+  background-color: #111827;
+  border-color: #374151;
+}
+
+html[data-theme='dark'] .dropdown-divider {
+  border-top-color: #374151;
+}
+
+html[data-theme='dark'] .settings-trigger {
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+html[data-theme='dark'] .settings-trigger:hover {
+  background-color: #1f2937;
+}
+
+@media (max-width: 992px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    border-bottom: 1px solid #e5e7eb;
+  }
+}

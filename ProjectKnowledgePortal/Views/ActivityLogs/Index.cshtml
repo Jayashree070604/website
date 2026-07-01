@@ -1,0 +1,65 @@
+@model ProjectKnowledgePortal.ViewModels.ActivityLogs.ActivityLogListViewModel
+
+@{
+	ViewData["Title"] = "Activity Logs";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header">
+		<h5 class="mb-0">Activity Logs</h5>
+	</div>
+	<div class="card-body">
+		<form method="get" class="row g-2 mb-3">
+			<div class="col-12 col-md-4">
+				<input asp-for="ActivityType" class="form-control" placeholder="Filter by activity type" />
+			</div>
+			<div class="col-12 col-md-6">
+				<input asp-for="SearchText" class="form-control" placeholder="Search description, entity, user" />
+			</div>
+			<div class="col-12 col-md-2 d-grid">
+				<button type="submit" class="btn btn-outline-primary">Filter</button>
+			</div>
+		</form>
+
+		<div class="table-responsive">
+			<table class="table table-striped align-middle">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+						<th>Project</th>
+						<th>User</th>
+						<th>IP</th>
+						<th>When (UTC)</th>
+						<th class="text-end">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.Logs.Count == 0)
+					{
+						<tr>
+							<td colspan="7" class="text-center text-muted py-4">No activity logs found.</td>
+						</tr>
+					}
+					else
+					{
+						@foreach (var log in Model.Logs)
+						{
+							<tr>
+								<td>@log.ActivityType</td>
+								<td>@log.Description</td>
+								<td>@(log.ProjectName ?? "-")</td>
+								<td>@(log.PerformedByUserId ?? "-")</td>
+								<td>@(log.IpAddress ?? "-")</td>
+								<td>@log.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+								<td class="text-end">
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@log.Id">Details</a>
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

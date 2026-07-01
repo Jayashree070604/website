@@ -1,0 +1,45 @@
+@model ProjectKnowledgePortal.ViewModels.Links.LinkDetailsViewModel
+@using ProjectKnowledgePortal.Helpers
+
+@{
+	ViewData["Title"] = "Link Details";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header">
+		<h5 class="mb-0">Link Details</h5>
+	</div>
+	<div class="card-body">
+		<dl class="row mb-0">
+			<dt class="col-sm-3">Title</dt>
+			<dd class="col-sm-9">@Model.Title</dd>
+
+			<dt class="col-sm-3">URL</dt>
+			<dd class="col-sm-9"><a href="@Model.Url" target="_blank" rel="noopener noreferrer">@Model.Url</a></dd>
+
+			<dt class="col-sm-3">Project</dt>
+			<dd class="col-sm-9">@Model.ProjectName</dd>
+
+			<dt class="col-sm-3">Category</dt>
+			<dd class="col-sm-9">@(Model.CategoryName ?? "-")</dd>
+
+			<dt class="col-sm-3">Description</dt>
+			<dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.Description) ? "-" : Model.Description)</dd>
+
+			<dt class="col-sm-3">Created (UTC)</dt>
+			<dd class="col-sm-9">@Model.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</dd>
+
+			<dt class="col-sm-3">Created By (User Id)</dt>
+			<dd class="col-sm-9">@Model.CreatedByUserId</dd>
+		</dl>
+	</div>
+	<div class="card-footer d-flex gap-2">
+		<a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+		<a class="btn btn-outline-primary" asp-action="Open" asp-route-id="@Model.Id" target="_blank">Open</a>
+		@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+		{
+			<a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+			<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+		}
+	</div>
+</div>

@@ -1,0 +1,48 @@
+@model ProjectKnowledgePortal.ViewModels.Documents.DocumentDetailsViewModel
+@using ProjectKnowledgePortal.Helpers
+
+@{
+	ViewData["Title"] = "Document Details";
+}
+
+<div class="card shadow-sm">
+	<div class="card-header">
+		<h5 class="mb-0">Document Details</h5>
+	</div>
+	<div class="card-body">
+		<dl class="row mb-0">
+			<dt class="col-sm-3">Name</dt>
+			<dd class="col-sm-9">@Model.Name</dd>
+
+			<dt class="col-sm-3">Project</dt>
+			<dd class="col-sm-9">@Model.ProjectName</dd>
+
+			<dt class="col-sm-3">Category</dt>
+			<dd class="col-sm-9">@(Model.CategoryName ?? "-")</dd>
+
+			<dt class="col-sm-3">File Type</dt>
+			<dd class="col-sm-9">@Model.FileExtension</dd>
+
+			<dt class="col-sm-3">Content Type</dt>
+			<dd class="col-sm-9">@Model.ContentType</dd>
+
+			<dt class="col-sm-3">File Size</dt>
+			<dd class="col-sm-9">@(Math.Round(Model.FileSizeBytes / 1024.0, 2)) KB</dd>
+
+			<dt class="col-sm-3">Uploaded (UTC)</dt>
+			<dd class="col-sm-9">@Model.UploadedAtUtc.ToString("yyyy-MM-dd HH:mm")</dd>
+
+			<dt class="col-sm-3">Uploaded By (User Id)</dt>
+			<dd class="col-sm-9">@Model.UploadedByUserId</dd>
+		</dl>
+	</div>
+	<div class="card-footer d-flex gap-2">
+		<a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+		<a class="btn btn-outline-primary" asp-action="ViewFile" asp-route-id="@Model.Id" target="_blank">View</a>
+		<a class="btn btn-outline-success" asp-action="Download" asp-route-id="@Model.Id">Download</a>
+		@if (User.IsInRole(RoleConstants.SuperAdmin) || User.IsInRole(RoleConstants.Admin))
+		{
+			<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+		}
+	</div>
+</div>

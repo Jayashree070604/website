@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Http
+@inject SignInManager<IdentityUser> SignInManager
+@{
+	var currentPage = ViewContext.ViewData["ActivePage"] as string;
+}
+
+<ul class="nav nav-pills flex-column">
+	<li class="nav-item">
+		<a class="nav-link @(currentPage == "ChangePassword" ? "active" : "")" id="change-password" asp-page="./ChangePassword">Password</a>
+	</li>
+</ul>
