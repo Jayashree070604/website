@@ -1,18 +1,20 @@
 # Project Knowledge Portal
 
-## Quick Deploy on Render (Easy + Reliable)
+## Quick Deploy on Render + Supabase + Cloudflare R2
 
 This repository is preconfigured for Render deployment using Docker.
 
-### Option A: One-click style with `render.yaml` (recommended)
+### Option A: Blueprint deploy with `render.yaml` (recommended)
 1. Push this repo to GitHub.
 2. In Render, choose **New +** -> **Blueprint**.
 3. Select this repository.
-4. Render reads `render.yaml` and creates:
-   - Web service (`pkp-web`)
-   - PostgreSQL database (`pkp-postgres`)
-   - Persistent disk mounted at `/data`
-5. Set secret env vars when prompted:
+4. Render reads `render.yaml` and creates a Docker web service.
+5. Set required secret env vars when prompted:
+   - `ConnectionStrings__DefaultConnection` (Supabase Postgres connection string)
+   - `ObjectStorage__ServiceUrl` (Cloudflare R2 endpoint)
+   - `ObjectStorage__BucketName`
+   - `ObjectStorage__AccessKey`
+   - `ObjectStorage__SecretKey`
    - `SeedSuperAdmin__Email`
    - `SeedSuperAdmin__Password`
 6. Deploy.
@@ -31,23 +33,26 @@ If you do not use Blueprint, configure manually:
 Set env vars:
 - `ASPNETCORE_ENVIRONMENT=Production`
 - `Database__Provider=postgresql`
-- `ConnectionStrings__DefaultConnection=<render postgres connection string>`
-- `Storage__UploadsRootPath=/data/uploads`
-- `ObjectStorage__Enabled=false`
+- `ConnectionStrings__DefaultConnection=<supabase postgres connection string>`
+- `ObjectStorage__Enabled=true`
+- `ObjectStorage__ServiceUrl=https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
+- `ObjectStorage__Region=auto`
+- `ObjectStorage__BucketName=<bucket-name>`
+- `ObjectStorage__AccessKey=<r2-access-key>`
+- `ObjectStorage__SecretKey=<r2-secret-key>`
+- `ObjectStorage__ForcePathStyle=true`
+- `ObjectStorage__KeyPrefix=pkp`
 - `SeedSuperAdmin__Email=<your-email>`
 - `SeedSuperAdmin__Password=<strong-password>`
 
 ### Data reliability modes
 
-#### 1) Good reliability (recommended baseline)
-- PostgreSQL on Render
-- Persistent disk for uploads (`/data/uploads`)
+#### Recommended stack
+- PostgreSQL on Supabase
+- Cloudflare R2 for uploads (S3-compatible)
+- Render free Docker web service
 
-#### 2) Highest reliability
-- PostgreSQL on Render
-- S3-compatible object storage for uploads
-  - Set `ObjectStorage__Enabled=true`
-  - Configure `ObjectStorage__ServiceUrl`, `Region`, `BucketName`, `AccessKey`, `SecretKey`
+This avoids local filesystem dependency for uploads and keeps data outside ephemeral app containers.
 
 ## Security checklist
 - Do not commit secrets in `appsettings*.json`.
