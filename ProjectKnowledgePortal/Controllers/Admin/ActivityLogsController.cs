@@ -9,6 +9,7 @@ namespace ProjectKnowledgePortal.Controllers;
 [Authorize(Roles = RoleConstants.SuperAdmin + "," + RoleConstants.Admin)]
 public class ActivityLogsController : Controller
 {
+    private static readonly TimeZoneInfo IndiaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
     private readonly IActivityLogService _activityLogService;
 
     public ActivityLogsController(IActivityLogService activityLogService)
@@ -35,7 +36,7 @@ public class ActivityLogsController : Controller
                 ProjectName = x.Project?.Name,
                 PerformedByUserId = x.PerformedByUserId,
                 IpAddress = x.IpAddress,
-                CreatedAtUtc = x.CreatedAtUtc
+                CreatedAtUtc = TimeZoneInfo.ConvertTimeFromUtc(x.CreatedAtUtc, IndiaTimeZone)
             }).ToList()
         };
 
@@ -61,7 +62,7 @@ public class ActivityLogsController : Controller
             ProjectName = log.Project?.Name,
             PerformedByUserId = log.PerformedByUserId,
             IpAddress = log.IpAddress,
-            CreatedAtUtc = log.CreatedAtUtc
+            CreatedAtUtc = TimeZoneInfo.ConvertTimeFromUtc(log.CreatedAtUtc, IndiaTimeZone)
         };
 
         return View(viewModel);
