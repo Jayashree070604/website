@@ -14,21 +14,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         sync: false
       - key: ObjectStorage__Enabled
-        value: "true"
-      - key: ObjectStorage__ServiceUrl
-        sync: false
-      - key: ObjectStorage__Region
-        value: auto
-      - key: ObjectStorage__BucketName
-        sync: false
-      - key: ObjectStorage__AccessKey
-        sync: false
-      - key: ObjectStorage__SecretKey
-        sync: false
-      - key: ObjectStorage__ForcePathStyle
-        value: "true"
-      - key: ObjectStorage__KeyPrefix
-        value: pkp
+        value: "false"
       - key: SeedSuperAdmin__Email
         sync: false
       - key: SeedSuperAdmin__Password

@@ -32,7 +32,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
     if (dbProvider == "postgresql" || dbProvider == "postgres")
     {
-        options.UseNpgsql(connectionString);
+        options.UseNpgsql(connectionString, npgsqlOptions =>
+        {
+            npgsqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorCodesToAdd: null);
+        });
     }
     else
     {
