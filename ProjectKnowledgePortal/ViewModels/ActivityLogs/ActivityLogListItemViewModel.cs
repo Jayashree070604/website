@@ -9,7 +9,7 @@ public class ActivityLogListItemViewModel
     public string? EntityId { get; set; }
     public int? ProjectId { get; set; }
     public string? ProjectName { get; set; }
-    public string? PerformedByUserId { get; set; }
+    public string? PerformedByUser { get; set; }
     public string? IpAddress { get; set; }
     public DateTime CreatedAtUtc { get; set; }
 }

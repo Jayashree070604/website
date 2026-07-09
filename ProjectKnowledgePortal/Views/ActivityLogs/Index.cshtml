@@ -27,9 +27,7 @@
 					<tr>
 						<th>Type</th>
 						<th>Description</th>
-						<th>Project</th>
 						<th>User</th>
-						<th>IP</th>
 						<th>When (IST)</th>
 						<th class="text-end">Action</th>
 					</tr>
@@ -38,7 +36,7 @@
 					@if (Model.Logs.Count == 0)
 					{
 						<tr>
-							<td colspan="7" class="text-center text-muted py-4">No activity logs found.</td>
+							<td colspan="5" class="text-center text-muted py-4">No activity logs found.</td>
 						</tr>
 					}
 					else
@@ -48,9 +46,7 @@
 							<tr>
 								<td>@log.ActivityType</td>
 								<td>@log.Description</td>
-								<td>@(log.ProjectName ?? "-")</td>
-								<td>@(log.PerformedByUserId ?? "-")</td>
-								<td>@(log.IpAddress ?? "-")</td>
+								<td>@(log.PerformedByUser ?? "-")</td>
 								<td>@log.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
 								<td class="text-end">
 									<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@log.Id">Details</a>
