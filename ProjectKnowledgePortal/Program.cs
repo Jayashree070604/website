@@ -76,31 +76,45 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Events = new CookieAuthenticationEvents
     {
         OnSignedIn = async context =>
         {
-            var activityLogService = context.HttpContext.RequestServices.GetRequiredService<IActivityLogService>();
-            var userId = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            var ipAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
+            try
+            {
+                var activityLogService = context.HttpContext.RequestServices.GetRequiredService<IActivityLogService>();
+                var userId = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var ipAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            await activityLogService.LogAsync(
-                activityType: "Login",
-                description: "User logged in successfully.",
-                performedByUserId: userId,
-                ipAddress: ipAddress);
+                await activityLogService.LogAsync(
+                    activityType: "Login",
+                    description: "User logged in successfully.",
+                    performedByUserId: userId,
+                    ipAddress: ipAddress);
+            }
+            catch
+            {
+            }
         },
         OnSigningOut = async context =>
         {
-            var activityLogService = context.HttpContext.RequestServices.GetRequiredService<IActivityLogService>();
-            var userId = context.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            var ipAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
+            try
+            {
+                var activityLogService = context.HttpContext.RequestServices.GetRequiredService<IActivityLogService>();
+                var userId = context.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var ipAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            await activityLogService.LogAsync(
-                activityType: "Logout",
-                description: "User logged out.",
-                performedByUserId: userId,
-                ipAddress: ipAddress);
+                await activityLogService.LogAsync(
+                    activityType: "Logout",
+                    description: "User logged out.",
+                    performedByUserId: userId,
+                    ipAddress: ipAddress);
+            }
+            catch
+            {
+            }
         }
     };
 });
