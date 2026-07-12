@@ -144,11 +144,19 @@ app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
 
-    var seeder = scope.ServiceProvider.GetRequiredService<IdentityDataSeeder>();
-    await seeder.SeedAsync();
+        var seeder = scope.ServiceProvider.GetRequiredService<IdentityDataSeeder>();
+        await seeder.SeedAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Startup");
+        logger.LogError(ex, "Startup migration/seeding failed. Continuing to start the web host.");
+    }
 }
 
 
