@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using ProjectKnowledgePortal.Data;
 using ProjectKnowledgePortal.Interfaces;
@@ -24,6 +25,12 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.Configure<IISServerOptions>(options =>
 {
     options.MaxRequestBodySize = maxInboundRequestSizeBytes;
+});
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
 });
 var dbProvider = builder.Configuration["Database:Provider"]?.Trim().ToLowerInvariant() ?? "sqlite";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -130,6 +137,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
