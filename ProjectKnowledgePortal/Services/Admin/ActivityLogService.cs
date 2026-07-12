@@ -1,15 +1,18 @@
 using ProjectKnowledgePortal.Interfaces;
 using ProjectKnowledgePortal.Models.Domain;
+using Microsoft.Extensions.Logging;
 
 namespace ProjectKnowledgePortal.Services;
 
 public class ActivityLogService : IActivityLogService
 {
     private readonly IActivityLogRepository _activityLogRepository;
+    private readonly ILogger<ActivityLogService> _logger;
 
-    public ActivityLogService(IActivityLogRepository activityLogRepository)
+    public ActivityLogService(IActivityLogRepository activityLogRepository, ILogger<ActivityLogService> logger)
     {
         _activityLogRepository = activityLogRepository;
+        _logger = logger;
     }
 
     public Task<List<ActivityLog>> GetAllAsync(string? activityType, string? searchText)
@@ -48,6 +51,13 @@ public class ActivityLogService : IActivityLogService
             CreatedAtUtc = DateTime.UtcNow
         };
 
-        await _activityLogRepository.AddAsync(log);
+        try
+        {
+            await _activityLogRepository.AddAsync(log);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Activity log write failed for activity type {ActivityType}.", log.ActivityType);
+        }
     }
 }
